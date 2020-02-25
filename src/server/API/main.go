@@ -5,6 +5,7 @@ import(
 	"encoding/json"
 	"fmt"
 	"github.com/gorilla/mux"
+	"time"
 )
 
 type UserInfo struct {
@@ -16,8 +17,15 @@ type UserInfo struct {
 func main() {
 	r := mux.NewRouter()
 	r.HandleFunc("/a",handle)
-	http.Handle("/", r)
+	//http.Handle("/", r)
+	server := &http.Server{
+		Handler: r,
+		Addr: "localhost:8000",
+		WriteTimeout: 15 * time.Second,
+		ReadTimeout: 15 * time.Second,
+	}
 
+	server.ListenAndServe()
 	//http.HandleFunc("/a",handle)
 	//http.ListenAndServe(":8080", nil)
 }
