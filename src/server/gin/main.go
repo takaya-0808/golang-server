@@ -14,14 +14,17 @@ type UserInfo struct {
 func main() {
 	router := gin.Default()
 
+	router.POST("/",Response)
+	router.Run(":8800")
+}
+
+func Response(ctx *gin.Context) {
+
 	userinfo := UserInfo{
 		Username: "hoge",
 		Email:    "1222@gmail.com",
 		Password: "password",
 	}
 
-	router.POST("/",func(ctx *gin.Context){
-		ctx.JSON(http.StatusOK,userinfo)
-	})
-	router.Run(":8800")
+	ctx.JSON(http.StatusOK,userinfo)
 }
