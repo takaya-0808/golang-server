@@ -56,7 +56,12 @@ func CreatToken() *string {
 	return &uu
 }
 
-func RegisterFunction(ctx *gin.Context) {}
+func RegisterFunction(ctx *gin.Context) {
+	
+	var userinfo UserInfo
+	ctx.BindJSON(&userinfo)
+	
+}
 
 func LoginFunction(ctx *gin.Context) {
 	
