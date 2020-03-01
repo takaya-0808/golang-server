@@ -22,6 +22,12 @@ type LoginForm struct {
 	Password  string  `json:"password"`
 }
 
+type RegisterForm struct {
+	Username  string   `json:"username"`
+	Email	  string   `json:"email"`
+	Password  string   `json:"password"`
+}
+
 type TokenResponse struct {
 	AccessToken string  `json:"accesstoken"`
 }
@@ -58,9 +64,13 @@ func CreatToken() *string {
 
 func RegisterFunction(ctx *gin.Context) {
 	
-	var userinfo UserInfo
-	ctx.BindJSON(&userinfo)
-	
+	var registerform RegisterForm
+	ctx.BindJSON(&registerform)
+	token := CreatToken()
+	tokenrequest := TokenResponse{
+		AccessToken: *token,
+	}
+	ctx.JSON(http.StatusOK,tokenrequest)
 }
 
 func LoginFunction(ctx *gin.Context) {
