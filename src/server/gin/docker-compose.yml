@@ -10,6 +10,8 @@ services:
 
         tty: true
 
+        working_dir: /go/src/gin/
+
         volumes: 
             - './:/go/src/gin/'
 
