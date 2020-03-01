@@ -53,6 +53,7 @@ func Response(ctx *gin.Context) {
 }
 
 func CreatToken() *string {
+
 	u, err := uuid.NewRandom()
 	if err != nil {
 		panic(err)
