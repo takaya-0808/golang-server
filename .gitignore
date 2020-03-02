@@ -1,2 +1,2 @@
 pkg/
-mysql/mysql_data/
+src/server/gin/mysql/mysql_data/
