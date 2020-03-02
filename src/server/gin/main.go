@@ -4,17 +4,11 @@ import(
 	"net/http"	
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
-	"log"
+	"gin/model"
 )
 
 type Error struct {
 	Error  	  string   `json:"error"`    
-}
-
-type UserInfo struct {
-	Username  string   `json:"username"`
-	Email	  string   `json:"email"`
-	Password  string   `json:"password"`
 }
 
 type LoginForm struct {
@@ -34,22 +28,12 @@ type TokenResponse struct {
 
 func main() {
 	router := gin.Default()
-	router.POST("/",Response)
+	db := model.Connection()
+	defer db.Close()
+
 	router.POST("/Login",LoginFunction)
 	router.POST("/Register",RegisterFunction)
 	router.Run(":8800")
-}
-
-func Response(ctx *gin.Context) {
-
-	var userinfo UserInfo
-	ctx.BindJSON(&userinfo)
-
-	token := CreatToken()
-	tokenrequest := TokenResponse{
-		AccessToken: *token,
-	}
-	ctx.JSON(http.StatusOK,tokenrequest)
 }
 
 func CreatToken() *string {
@@ -78,8 +62,6 @@ func LoginFunction(ctx *gin.Context) {
 	
 	var loginform LoginForm
 	ctx.BindJSON(&loginform)
-	log.Println(loginform.Username)
-
 	if (loginform.Username == "hoge" && loginform.Password == "password") {
 		token := CreatToken()
 		tokenrequest := TokenResponse{
