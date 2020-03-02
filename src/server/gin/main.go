@@ -30,6 +30,7 @@ func main() {
 	router := gin.Default()
 	db := model.Connection()
 	defer db.Close()
+	model.Migrate(db)
 
 	router.POST("/Login",LoginFunction)
 	router.POST("/Register",RegisterFunction)
