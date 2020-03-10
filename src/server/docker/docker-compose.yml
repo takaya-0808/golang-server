@@ -1,0 +1,40 @@
+version: '3'
+
+services: 
+
+    go:
+        image: 'golang:1.13'
+
+        ports: 
+            - '8008:8008'
+
+        tty: true
+
+        working_dir: /go/src/docker/
+
+        volumes: 
+            - './:/go/src/docker/'
+
+        depends_on: 
+          - mysql
+
+        command: go run main.go
+
+    mysql:
+
+        image: mysql:5.6.34
+
+        ports: 
+          - "3306:3306"
+
+        volumes: 
+          - ./mysql/mysql_data:/var/lib/mysql
+          - ./mysql/init:/docker-entrypoint-initdb.d
+        
+        tty: true
+
+        expose: 
+          - "3306"
+
+        environment: 
+          MYSQL_ROOT_PASSWORD: password

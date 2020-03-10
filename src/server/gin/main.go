@@ -5,6 +5,7 @@ import(
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"gin/model"
+	"github.com/jinzhu/gorm"
 )
 
 type Error struct {
@@ -26,14 +27,27 @@ type TokenResponse struct {
 	AccessToken string  `json:"accesstoken"`
 }
 
+
+type Handle struct {
+	ID        int      `json:"id"`
+	Username  string   `json:"username"`
+	Email	  string   `json:"email"`
+	Password  string   `json:"password"`
+}
+
+func New(db *gorm.DB) *Handle {
+	return  &Handle{}
+}
+
 func main() {
 	router := gin.Default()
 	db := model.Connection()
 	defer db.Close()
 	model.Migrate(db)
+	hdl := New(db)
 
-	router.POST("/Login",LoginFunction)
-	router.POST("/Register",RegisterFunction)
+	router.POST("/Login",hdl.LoginFunction)
+	router.POST("/Register",hdl.RegisterFunction)
 	router.Run(":8800")
 }
 
@@ -48,10 +62,11 @@ func CreatToken() *string {
 	return &uu
 }
 
-func RegisterFunction(ctx *gin.Context) {
+func (h *Handle)RegisterFunction(ctx *gin.Context) {
 	
 	var registerform RegisterForm
 	ctx.BindJSON(&registerform)
+	model.NewInsert(registerform.Username, registerform.Email, registerform.Password, h.db)
 	token := CreatToken()
 	tokenrequest := TokenResponse{
 		AccessToken: *token,
@@ -59,11 +74,12 @@ func RegisterFunction(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK,tokenrequest)
 }
 
-func LoginFunction(ctx *gin.Context) {
+func (h *Handle)LoginFunction(ctx *gin.Context) {
 	
 	var loginform LoginForm
 	ctx.BindJSON(&loginform)
-	if (loginform.Username == "hoge" && loginform.Password == "password") {
+	userID := model.LoginProcess(loginform.Username, loginform.Password, h.db)
+	if (userID != nil) {
 		token := CreatToken()
 		tokenrequest := TokenResponse{
 			AccessToken: *token,
@@ -76,3 +92,4 @@ func LoginFunction(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK,error)
 	}
 }
+

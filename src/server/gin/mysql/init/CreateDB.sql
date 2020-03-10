@@ -9,3 +9,4 @@ create table UserInfo(
     Password char(255) NOT NULL,
     PRIMARY KEY (ID)
 );
+

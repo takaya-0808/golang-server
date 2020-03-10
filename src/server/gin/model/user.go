@@ -25,3 +25,16 @@ func Migrate(db *gorm.DB) {
 	db.AutoMigrate(&UserInfo{})
 }
 
+func NewInsert(name string, email string, password string, db *gorm.DB) {
+	userinfo := UserInfo{Username:name, Email:email, Password:password}
+	db.Create(&userinfo)
+}
+
+func LoginProcess(name string, password string, db *gorm.DB) *int {
+	var userinfo UserInfo
+	db.Where("Username = ? AND Password = ?", name, password).Find(&userinfo)
+	if userinfo.ID != 0 {
+		return &userinfo.ID
+	}
+	return nil
+}

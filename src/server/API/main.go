@@ -14,10 +14,15 @@ type UserInfo struct {
 	Password string   `json:"username"`
 }
 
+type TokenResponse struct {
+	ID           int     `json:"id"`
+	AccessToken  string  `json:"accesstoken"`
+}
+
 func main() {
 	r := mux.NewRouter()
 	r.HandleFunc("/a",handle)
-	//http.Handle("/", r)
+	
 	server := &http.Server{
 		Handler: r,
 		Addr: "localhost:8000",
@@ -26,18 +31,18 @@ func main() {
 	}
 
 	server.ListenAndServe()
-	//http.HandleFunc("/a",handle)
-	//http.ListenAndServe(":8080", nil)
+	
 }
 
 func handle(w http.ResponseWriter, r *http.Request) {
-	//fmt.Println(w, "Hello World!!")
 
 	userinfo := UserInfo{
 		Username: "hoge",
 		Email:    "1222@gmail.com",
 		Password: "password",
 	}
+
+	//req, err := http.NewRequest()
 
 	res, err := json.Marshal(userinfo)
 	fmt.Println(res)
@@ -47,7 +52,7 @@ func handle(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-	//w.Write(res)
+	
 	fmt.Fprint(w, userinfo)
     return
 }
