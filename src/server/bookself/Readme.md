@@ -9,5 +9,5 @@
 + Request: PUT http://localhost/v1/articl/:id
 + Response: {id: "id", articl: "articl"}
 
-+ Request: DELET http://localhost/v1/articl/:id
++ Request: DELETE http://localhost/v1/articl/:id
 + Response: {mess: "Message"}
