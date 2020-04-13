@@ -1,0 +1,42 @@
+version: '3'
+
+services: 
+
+    go:
+        image: 'golang:1.13'
+
+        ports: 
+            - '8080:8080'
+
+        tty: true
+
+        working_dir: /go/src/user/
+
+        volumes: 
+            - './:/go/src/user/'
+
+        command: go run main.go
+
+
+    mysql:
+
+        image: mysql:5.6.34
+    
+        ports: 
+          - "3306:3306"
+    
+        volumes: 
+          - ./mysql/mysql_data:/var/lib/mysql
+          - ./mysql/init:/docker-entrypoint-initdb.d
+            
+        tty: true
+    
+        expose: 
+          - "3306"
+
+        container_name: godockerDB
+    
+        environment: 
+          MYSQL_USER: root
+          MYSQL_DATABASE: test2
+          MYSQL_ROOT_PASSWORD: password
